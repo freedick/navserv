@@ -5,10 +5,10 @@ import urllib, httplib2
 import MySQLdb
 
 class DB:
-	db = MySQLdb.connect(host="", # your host, usually localhost
-                     user="navigator", # your username
+	db = MySQLdb.connect(host="130.240.5.34", # your host, usually localhost
+                     user="root", # your username
                       passwd="", # your password
-                      db="navigator")
+                      db="Navigator")
                       
 	cur = db.cursor() 
 	cur.execute("SELECT * FROM YOUR_TABLE_NAME")
@@ -112,6 +112,7 @@ urls = (
 	'/routes/([0-9]+)'	,get_route,
 	'/points/([0-9]+)'	,point_handler,
 	'/google/'		,google_test,
+	'/report/'		,DB,
 )
 
 app = web.application(urls, {'routes':routes,'points':points})
