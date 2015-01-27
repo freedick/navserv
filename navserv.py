@@ -2,6 +2,18 @@
 import web
 import json
 import urllib, httplib2
+import MySQLdb
+
+class DB:
+	db = MySQLdb.connect(host="", # your host, usually localhost
+                     user="navigator", # your username
+                      passwd="", # your password
+                      db="navigator")
+                      
+	cur = db.cursor() 
+	cur.execute("SELECT * FROM YOUR_TABLE_NAME")
+	for row in cur.fetchall() :
+    		print row[0]
 
 class RouteEncoder(json.JSONEncoder):
 	def default(self, obj):
