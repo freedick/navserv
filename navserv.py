@@ -4,19 +4,6 @@
 import web
 import json
 import urllib, httplib2
-import MySQLdb
-
-class DB:
-	def __init__(self):
-		db = MySQLdb.connect(host="130.240.5.34", # your host, usually localhost
-			     user="root", # your username
-			      passwd="", # your password
-			      db="Navigator")
-			      
-		cur = db.cursor() 
-		cur.execute("SELECT * FROM YOUR_TABLE_NAME")
-		for row in cur.fetchall() :
-			print row[0]
 
 #Import essential datamodelsures and custom made API's
 import util
