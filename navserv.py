@@ -19,9 +19,9 @@ routes = []
 points = [RoadPoint(1.0,1.0),RoadPoint(1.1,1.1),RoadPoint(1.2,1.4),RoadPoint(1.4,1.0),RoadPoint(1.1,1.0)]
 segments = [RoadSegment(points[0],points[1],"ok"),RoadSegment(points[0],points[4],"slippery"),RoadSegment(points[1],points[2],"ok"),RoadSegment(points[1],points[4],"slippery"),RoadSegment(points[2],points[3],"ok"),RoadSegment(points[4],points[3],"snowy")]
 routesegments=[segments[0],segments[2],segments[4]]
-routes.append(Route(routesegments,"herts via centrum"))
+routes.append(Route("herts via centrum",routesegments))
 routesegments=[segments[0],segments[1],segments[5]]
-routes.append(Route(routesegments,"centrum via herts"))
+routes.append(Route("centrum via herts",routesegments))
 
 def loadState(handler):
 	#These will be available as global variables within web.py classes. It should contain the datamodelsures required for full functionality.
