@@ -53,12 +53,12 @@ class QuadTree:
 		if self.rect.contains(point):
 			if len(self.children)>0:
 				for child in self.children:
-					if child.rect.contains(point):
-						child.add(point)
+					if child.contains(point):
+						child.addPoint(point)
 						break
 			else:
 				self.points.append(point)
-				if len(self.points)>max_points:
+				if len(self.points)>self.max_points:
 					self.__divide()
 		else:
 			self.__extend()
@@ -69,7 +69,7 @@ class QuadTree:
 		if len(children)>0:
 			closest = None
 			for child in children:
-				if child.rect.contains(point):
+				if child.contains(point):
 					closest = child.closestNeighbor(point)
 					break
 			for child in children:
@@ -79,11 +79,14 @@ class QuadTree:
 						closest = candidate
 
 		else:
-			closest = self.points[0]
-			for neighbor in self.points[1:]:
-				if distance(neighbor,point)<distance(point,closest):
-					closest = neighbor
-			return closest
+			if len(points)>0:
+				closest = self.points[0]
+				for neighbor in self.points[1:]:
+					if distance(neighbor,point)<distance(point,closest):
+						closest = neighbor
+				return closest
+			else:
+				return None
 	def __divide(self):
 		childrects = self.rect.split()
 		for rect in childrects:
@@ -94,12 +97,20 @@ class QuadTree:
 					child.append(point)
 					break
 		self.points = []
-	def __extend(self, point):
+	def __extend(self):
 		rectangles = [self.rect.translate(-0.5((i/2)%2), -0.5+(i%2)) for i in xrange(4)]
 		newQTs = [QuadTree(self.max_points, rect) for rect in rectangles]
-		for i in xrange(4):
-			newQTs[i].children = [[],[],[],[]]
-			newQts[i].children[-i] = self.children[i]
+		if len(children)>0:
+			for i in xrange(4):
+				newQTs[i].children = [[],[],[],[]]
+				newQts[i].children[-i] = self.children[i]
+			#new.points = self.points
+		else:
+			for old_point in self.points:
+				for qt in newQTs:
+					if qt.contains(old_point):
+						qt.addPoint(old_point)
+			self.points=[]
 		self.children = newQTs
-		new.points = self.points
-		
+						
+
