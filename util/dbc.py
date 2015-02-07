@@ -9,23 +9,27 @@ def connect(host, username, password, dbname):
 		passwd=password,
 		db=dbname)
 
-def query(query):
+def query(query, commit=True):
 	global __DATABASE__
 	if query[-1] != ";":
 		query=query+";"
 	cur = __DATABASE__.cursor() 
 	cur.execute(query)
-	return cur.fetchall()
+	if commit:
+		__DATABASE__.commit()
+	result = cur.fetchall()
+	cur.close()
+	return result
 
 def addPoint(lat,lon):
-	return query("INSERT INTO RoadPoints (Lat, Lon) VALUES (lat, lon)")
+	return query("INSERT INTO RoadPoints (Lat, Lon) VALUES (%f, %f)"%(lat, lon))
 
 def addSegment(pointa,pointb):
-	return query("INSERT INTO RoadSegments (PointA, PointB, Status) VALUES (%d, %d, 0)" % (pointa.id,pointb.id))
+	return query("INSERT INTO RoadSegments (PointA, PointB, Status) VALUES (%d, %d, 0)" % (pointa.id, pointb.id))
 
-def addSegmentToRoute(routeid, segmentid):
-	return query("INSERT INTO RouteSegments (RouteID,RoadSegemntID) VALUES (routeid, segmentid)")
+def addSegmentToRoute(route, segment):
+	return query("INSERT INTO RouteSegments (RouteID,RoadSegemntID) VALUES (%d, %d)" % (route.id, segment.id))
 
 def addRoute(name):
-	return query("INSERT INTO Routes (Name, Version) VALUES (name, 0)")
+	return query("INSERT INTO Routes (Name, Version) VALUES (%s, 0)" % (name))
 
