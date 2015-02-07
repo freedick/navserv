@@ -9,6 +9,7 @@ import urllib, httplib2
 import util
 from models.road import RoadSegment, RoadPoint
 from models.route import Route
+import settings
 
 #TODO: move theese and import them instead
 
@@ -22,6 +23,11 @@ routesegments=[segments[0],segments[2],segments[4]]
 routes.append(Route("herts via centrum",routesegments))
 routesegments=[segments[0],segments[1],segments[5]]
 routes.append(Route("centrum via herts",routesegments))
+
+class NavigatorApplication(web.application):
+    def run(self, port=80, *middleware):
+        func = self.wsgifunc(*middleware)
+        return web.httpserver.runsimple(func, ('0.0.0.0', port))
 
 def loadState(handler):
 	#These will be available as global variables within web.py classes. It should contain the datamodelsures required for full functionality.
@@ -48,9 +54,8 @@ urls = (
 	'/google/'		,'google_test',
 )
 
-
 if __name__ == "__main__":
-	app = web.application(urls, globals())
+	app = NavigatorApplication(urls, globals())
 	app.add_processor(loadState)
-	app.run()
+	app.run(port=settings.PORT)
 
