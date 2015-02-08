@@ -48,3 +48,26 @@ def updateSegment(segment):
 	cur = query("UPDATE RoadSegments SET (Status=%d) WHERE id=% WHERE id=%d"%(segment.status,segment.id))
 	cur.close()
 
+def getSegments():
+	cur = query("SELECT * FROM RoadSegments")
+	result = cur.fetchall()
+	cur.close()
+	return result
+
+def getPoints():
+	cur = query("SELECT * FROM RoadPoints")
+	result = cur.fetchall()
+	cur.close()
+	return result
+
+def getRouteSegments():
+	cur = query("SELECT * FROM RouteSegments")
+	result = cur.fetchall()
+	cur.close()
+	return result
+
+def getRoutes():
+	cur = query("SELECT * FROM Routes")
+	result = cur.fetchall()
+	cur.close()
+	return result

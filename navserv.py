@@ -19,13 +19,39 @@ util.dbc.connect(settings.MYSQL_HOST,settings.MYSQL_USERNAME,settings.MYSQL_PASS
 
 
 #Test data
-routes = []
+"""routes = []
 points = [RoadPoint(1.0,1.0),RoadPoint(1.1,1.1),RoadPoint(1.2,1.4),RoadPoint(1.4,1.0),RoadPoint(1.1,1.0)]
 segments = [RoadSegment(points[0],points[1],1),RoadSegment(points[0],points[4],2),RoadSegment(points[1],points[2],1),RoadSegment(points[1],points[4],2),RoadSegment(points[2],points[3],1),RoadSegment(points[4],points[3],3)]
 routesegments=[segments[0],segments[2],segments[4]]
 routes.append(Route("herts via centrum",routesegments))
 routesegments=[segments[0],segments[1],segments[5]]
-routes.append(Route("centrum via herts",routesegments))
+routes.append(Route("centrum via herts",routesegments))"""
+pointlist = util.dbc.getPoints()
+points = {}
+for point in pointlist:
+	point_id = point[0]
+	point_lat = point[1]
+	point_lng = point[2]
+	points[point_id] = RoadPoint(point_lat, point_lng, point_id)
+segmentlist = util.dbc.getSegments()
+segments = {}
+for segment in segmentlist:
+	segment_id = segment[0]
+	pointa = points[segment[1]]
+	pointb = points[segment[2]]
+	status = segment[3]
+	segments[segment_id] = RoadSegment(pointa, pointb, status, segment_id)
+routelist = util.dbc.getRoutes()
+routes = {}
+for route in routelist:
+	route_id = route[0]
+	name = route[1]
+	routes[route_id] = Route(name, route_id)
+routesegmentslist = util.dbc.getRouteSegments()
+for routesegment in routesegmentslist:
+	route_id = routesegment[1]
+	segment_id = routesegment[2]
+	routes[route_id].addSegment(segments[segment_id],False)
 
 class NavigatorApplication(web.application):
     def run(self, port=80, *middleware):
