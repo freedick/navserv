@@ -1,1 +1,5 @@
-PORT = 80
+PORT = 8080
+MYSQL_HOST = "127.0.0.1"
+MYSQL_USERNAME = "root"
+MYSQL_PASSWORD = raise Exception("Insert password here")
+MYSQL_DBNAME = "Navigator"

@@ -17,19 +17,34 @@ def query(query, commit=True):
 	cur.execute(query)
 	if commit:
 		__DATABASE__.commit()
-	result = cur.fetchall()
+	#result = cur.fetchall()
+	#cur.close()
+	#return result
+	return cur
+
+def addPoint(lat,lng):
+	cur = query("INSERT INTO RoadPoints (Lat, Lon) VALUES (%f, %f)"%(lat, lng))
+	point_id = cur.lastrowid
 	cur.close()
-	return result
+	return point_id
 
-def addPoint(lat,lon):
-	return query("INSERT INTO RoadPoints (Lat, Lon) VALUES (%f, %f)"%(lat, lon))
-
-def addSegment(pointa,pointb):
-	return query("INSERT INTO RoadSegments (PointA, PointB, Status) VALUES (%d, %d, 0)" % (pointa.id, pointb.id))
-
+def addSegment(pointa,pointb,status):
+	cur = query("INSERT INTO RoadSegments (PointA, PointB, Status) VALUES (%d, %d, %d)" % (pointa.id, pointb.id, status))
+	segment_id = cur.lastrowid
+	cur.close()
+	return segment_id
 def addSegmentToRoute(route, segment):
-	return query("INSERT INTO RouteSegments (RouteID,RoadSegemntID) VALUES (%d, %d)" % (route.id, segment.id))
+	cur = query("INSERT INTO RouteSegments (RouteID,RoadSegmentID) VALUES (%d, %d)" % (route.id, segment.id))
+	route_segment_id = cur.lastrowid
+	cur.close()
+	return route_segment_id
 
 def addRoute(name):
-	return query("INSERT INTO Routes (Name, Version) VALUES (%s, 0)" % (name))
+	cur = query("INSERT INTO Routes (Name, Version) VALUES ('%s', 0)" % (name.replace("'","\\'")))
+	route_id = cur.lastrowid
+	cur.close()
+	return route_id
+def updateSegment(segment):
+	cur = query("UPDATE RoadSegments SET (Status=%d) WHERE id=% WHERE id=%d"%(segment.status,segment.id))
+	cur.close()
 
