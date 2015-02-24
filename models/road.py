@@ -25,4 +25,7 @@ class RoadPoint:
 			self.id=id
 	def toDict(self):
 		return {'lng':self.lng, 'lat':self.lat}
+		
+	def addToSegmentList(self, segment):
+		self.segments.append(segment)	
 
