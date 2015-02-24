@@ -18,6 +18,7 @@ class RoadPoint:
 	def __init__(self, lat, lng, id=None):
 		self.lat=lat
 		self.lng=lng
+		self.segments=[]
 		if id is None:
 			self.id = dbc.addPoint(self.lat,self.lng)
 		else:
