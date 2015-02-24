@@ -4,6 +4,8 @@ class RoadSegment:
 		self.pointA=roadPointA
 		self.pointB=roadPointB
 		self.status=status
+		roadPointA.addToSegmentList(self)
+		roadPointB.addToSegmentList(self)
 		if id is None:
 			self.id=dbc.addSegment(roadPointA, roadPointB, self.status)
 		else:
