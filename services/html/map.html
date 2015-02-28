@@ -7,6 +7,7 @@
 		<script type="text/javascript"
 			src="https://maps.googleapis.com/maps/api/js?key={{settings.GOOGLE_MAPS_API_KEY}}">
 		</script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 		<script type="text/javascript">
 			//function initialize() {
 			/*var mapOptions = {
@@ -85,6 +86,7 @@
 
 				calcRoute();
 				addLine(65.772323,-22.2124897,65.598673,22.1449843,"#E01010");
+				$.getJSON( "/routes/", function(data){console.log(data);});//debug printout of result.
 			}
 
 			function calcRoute() {
@@ -170,9 +172,12 @@
 		</script>
 	</head>
 	<body>
-		<div style="width:70%;height:400px">
-			<div id="map-canvas"></div>
+		<div>
+			<div style="width:70%;height:700px;float:left">
+				<div id="map-canvas"></div>
+			</div>
 		</div>
+
 		<p id="total">aoeu</p>
 		<p>Polyline:</p><pre id="polyline">aoeu</pre>
 		<form method="POST" action="admin/route">
