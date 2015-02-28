@@ -72,6 +72,7 @@ from services.main import index
 from services.point import *
 from services.google import google_test
 from services.report import RequestHandler
+from services.admin import admin_index
 
 #Bind urls to services 
 #TODO: make recursive url decoding, so that each service decides which suburl decodes to what.
@@ -83,6 +84,7 @@ urls = (
 	'/points/([0-9]+)'	,'point_handler',
 	'/google/'		,'google_test',
 	'/report/'		,'RequestHandler',
+	'/admin/?'		,'admin_index',
 )
 
 if __name__ == "__main__":
