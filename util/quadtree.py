@@ -14,10 +14,10 @@ def distance(pointa, pointb):
 			distances.append(abs(point.lng - rect.lng_min))
 			distances.append(abs(point.lng - rect.lng_max))
 		#Check corner distances
-		distances.append(distance(point, models.road.RoadPoint(rect.lat_min,rect.lng_min)))
-		distances.append(distance(point, models.road.RoadPoint(rect.lat_min,rect.lng_max)))
-		distances.append(distance(point, models.road.RoadPoint(rect.lat_max,rect.lng_min)))
-		distances.append(distance(point, models.road.RoadPoint(rect.lat_max,rect.lng_max)))
+		distances.append(distance(point, models.road.RoadPoint(rect.lat_min,rect.lng_min,-1)))
+		distances.append(distance(point, models.road.RoadPoint(rect.lat_min,rect.lng_max,-1)))
+		distances.append(distance(point, models.road.RoadPoint(rect.lat_max,rect.lng_min,-1)))
+		distances.append(distance(point, models.road.RoadPoint(rect.lat_max,rect.lng_max,-1)))
 		#Return least distance
 		return min(distances)
 	return ((pointa.lat-pointb.lat)**2 + (pointa.lng-pointb.lng)**2)**0.5
@@ -114,8 +114,8 @@ class QuadTree:
 		newQTs = [QuadTree(self.max_points, *rect.getCoords()) for rect in rectangles]
 		if len(self.children)>0:
 			for i in xrange(4):
-				rects = newQTs[i].split()
-				newQTs[i].children = [ QuadTree(self.max_points, rects[n]) if n!=(2+i)%4 else self.children[i] for n in xrange(4)]
+				rects = newQTs[i].rect.split()
+				newQTs[i].children = [ QuadTree(self.max_points, *rects[n].getCoords()) if n!=(2+i)%4 else self.children[i] for n in xrange(4)]
 				#newQTs[i].children[-i] = self.children[i]
 		else:
 			for old_point in self.points:

@@ -7,6 +7,7 @@ import urllib, httplib2
 
 #Import essential datamodelsures and custom made API's
 import util
+import util.quadtree
 from models.road import RoadSegment, RoadPoint
 from models.route import Route
 import settings
@@ -28,11 +29,14 @@ routesegments=[segments[0],segments[1],segments[5]]
 routes.append(Route("centrum via herts",routesegments))"""
 pointlist = util.dbc.getPoints()
 points = {}
+point_quadtree = util.quadtree.QuadTree(8,65.82,21.69,65.5,22.36)#rectangle from Boden to southeast of Lule
+
 for point in pointlist:
 	point_id = point[0]
 	point_lat = point[1]
 	point_lng = point[2]
 	points[point_id] = RoadPoint(point_lat, point_lng, point_id)
+	point_quadtree.addPoint(points[point_id])
 segmentlist = util.dbc.getSegments()
 segments = {}
 for segment in segmentlist:
@@ -64,6 +68,7 @@ def loadState(handler):
 	web.ctx.routes = routes
 	web.ctx.segments = segments
 	web.ctx.points = points
+	web.ctx.point_quadtree = point_quadtree
 	return handler()
 
 #Import all services
@@ -72,7 +77,7 @@ from services.main import index
 from services.point import *
 from services.google import google_test
 from services.report import RequestHandler
-from services.admin import admin_index
+from services.admin import admin_index, admin_route
 
 #Bind urls to services 
 #TODO: make recursive url decoding, so that each service decides which suburl decodes to what.
@@ -85,6 +90,7 @@ urls = (
 	'/google/'		,'google_test',
 	'/report/'		,'RequestHandler',
 	'/admin/?'		,'admin_index',
+	'/admin/route/?'	,'admin_route',
 )
 
 if __name__ == "__main__":
