@@ -53,7 +53,7 @@ def addRoute(name):
 
 #Change the status of a segment in the database
 def updateSegment(segment):
-	cur = query("UPDATE RoadSegments SET (Status=%d) WHERE id=% WHERE id=%d"%(segment.status,segment.id))
+	cur = query("UPDATE RoadSegments SET (Status=%d) WHERE id=%d"%(segment.status,segment.id))
 	cur.close()
 
 #Get all segments in the database
@@ -79,6 +79,96 @@ def getRouteSegments():
 #Get all routes in the database
 def getRoutes():
 	cur = query("SELECT * FROM Routes")
+	result = cur.fetchall()
+	cur.close()
+	return result
+
+#Create a car in the database
+def addCar(carid,typevalue):
+	cur = query("INSERT INTO Cars (ID, Status, Type) VALUES (%d, 0, %d)" % (carid,typevalue))
+	car_id = cur.lastrowid
+	cur.close()
+	return car_id
+	
+#Create a assignment in the database	
+def addAssignment(carid,typevalue):
+	cur = query("INSERT INTO Assignments (CarID, Type, 0) VALUES (%d, %d)" % (carid, typevalue))
+	assignment_id = cur.lastrowid
+	cur.close()
+	return assignment_id
+	
+#Add a segment to an assignment
+def addAssignmentSegment(assid,segid):
+	cur = query("INSERT INTO AssignmentSegments (AssignmentID, SegmentID) VALUES (%d, %d)" % (assid, segid))
+	assignmentsegment_id = cur.lastrowid
+	cur.close()
+	return assignmentsegment_id
+
+#Change the status of a car in the database
+def changeCarStatus(carid,status):
+	cur = query("UPDATE Cars SET (Status=%d) WHERE id=%d"%(status,carid))
+	cur.close()
+	
+#Change the type of a car in the database
+def changeCarType(carid,typevalue):
+	cur = query("UPDATE Cars SET (Type=%d) WHERE id=%d"%(typevalue,carid))
+	cur.close()
+
+#Change the status of a assignment in the database
+def changeAssignmentStatus(assid,status):
+	cur = query("UPDATE Assignments SET (Status=%d) WHERE id=%d"%(status,assid))
+	cur.close()
+
+#Assign a assignment to a car int the database
+def assignAssingmentToCar(assid,carid):
+	cur = query("UPDATE Assignments SET (CarID=%d) WHERE id=%d"%(carid,assid))
+	cur.close()
+
+#Get all car that have the type (typevalue)
+def getCarsOnType(typevalue):
+	cur = query("SELECT * FROM Cars WHERE Type = %d"%(typevalue))
+	result = cur.fetchall()
+	cur.close()
+	return result
+	
+#Get all car that have the status (status)
+def getCarsOnStatus(status):
+	cur = query("SELECT * FROM Cars WHERE Status = %d"%(status))
+	result = cur.fetchall()
+	cur.close()
+	return result
+	
+#Get all cars 
+def getCars():
+	cur = query("SELECT * FROM Cars)
+	result = cur.fetchall()
+	cur.close()
+	return result
+
+#Get all assignments that have the type (typevalue)
+def getAssignmentsOnType(typevalue):
+	cur = query("SELECT * FROM Assignments WHERE Type = %d"%(typevalue))
+	result = cur.fetchall()
+	cur.close()
+	return result
+	
+#Get all assignments that have the status (status)
+def getAssignmentsOnStatus(status):
+	cur = query("SELECT * FROM Assignments WHERE Status = %d"%(status))
+	result = cur.fetchall()
+	cur.close()
+	return result
+	
+#Get all assignments
+def getAssignmentsOnStatus():
+	cur = query("SELECT * FROM Assignments )
+	result = cur.fetchall()
+	cur.close()
+	return result
+	
+#Get all segemnts for a assignment
+def getAssignmentsSegments(assid):
+	cur = query("SELECT * FROM AssignmentSegments WHERE AssignmentID = %d"%(assid))
 	result = cur.fetchall()
 	cur.close()
 	return result
